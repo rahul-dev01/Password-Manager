@@ -26,10 +26,12 @@ const Manager = () => {
         setForm({ ...Form, [e.target.name]: e.target.value });
     };
 
-    const savePassword = () => {
+    const addPassword = () => {
         setPasswordArray([...PasswordArray, Form]);
         localStorage.setItem('passwords', JSON.stringify([...PasswordArray, Form]));
     };
+
+
 
     useEffect(() => {
         let passwords = localStorage.getItem('passwords');
@@ -89,7 +91,7 @@ const Manager = () => {
                     </div>
 
                     <button
-                        onClick={savePassword}
+                        onClick={addPassword}
                         className="flex items-center justify-center bg-green-400 text-white px-8 py-3 rounded-full gap-3 w-fit mx-auto border border-green-600 hover:bg-green-700 hover:border-green-800 transition">
                         <lord-icon src="https://cdn.lordicon.com/jgnvfzqg.json" trigger="hover"></lord-icon>
                         Add Password
@@ -100,16 +102,17 @@ const Manager = () => {
                     <h1 className="text-2xl font-bold rounded-md">Your Password</h1>
 
                     {PasswordArray.length === 0 && <div>No Password To Show ....</div>}
-
                     {PasswordArray.length !== 0 && (
-                        <div className="overflow-x-auto">
-                            <table className="table-auto w-full min-w-max rounded-lg overflow-hidden border border-gray-400 border-collapse">
+                        <div className="overflow-x-auto lg:overflow-visible">
+                            <table className="table-auto w-full max-w-full  rounded-lg overflow-hidden border border-gray-400 border-collapse">
+
+
                                 <thead className="bg-green-800 text-white">
                                     <tr>
                                         <th className="px-4 py-3 text-left whitespace-nowrap text-sm sm:text-base">Site</th>
                                         <th className="px-4 py-3 text-left whitespace-nowrap text-sm sm:text-base">UserName</th>
                                         <th className="px-4 py-3 text-left whitespace-nowrap text-sm sm:text-base">Password</th>
-                                        <th className="px-4 py-3 text-center whitespace-nowrap text-sm sm:text-base">Action</th>
+                                        <th className="px-2 py-3 text-center whitespace-nowrap text-sm sm:text-base w-[80px]">Action</th>
                                     </tr>
                                 </thead>
 
@@ -137,17 +140,21 @@ const Manager = () => {
                                                 </div>
                                             </td>
 
-                                            <td className="w-24 bg-green-200 px-4 py-3 flex justify-center items-center space-x-2 border-l border-gray-400 rounded-r-lg">
-                                                <img src={editButton} alt="Edit" className="w-5 h-5 cursor-pointer hover:scale-110 transition duration-200" />
-                                                <img src={deleteButton} alt="Delete" className="w-5 h-5 cursor-pointer hover:scale-110 transition duration-200" />
+                                            <td className="bg-green-200 px-1 py-3 flex justify-around items-center space-x-1 border-l border-gray-400 rounded-r-lg w-[80px]">
+                                                <span><img src={editButton} alt="Edit" className="w-4 h-4 cursor-pointer hover:scale-110 transition duration-200" /></span>
+                                                <span><img src={deleteButton} alt="Delete" className="w-4 h-4 cursor-pointer hover:scale-110 transition duration-200" /></span>
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
+
+
                             </table>
                         </div>
                     )}
                 </div>
+
+
             </div>
 
             <ToastContainer />
