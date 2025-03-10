@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import eyeIcon from '../assets/Image/eye.png';
 import closeEyeIcon from '../assets/Image/closeEye.png';
+import copyButton from "../assets/Image/copy.png"
+import editButton from "../assets/Image/edit.png"
+import deleteButton from "../assets/Image/delete.png"
 
 const Manager = () => {
     const [Form, setForm] = useState({ site: '', username: '', password: '' });
@@ -11,6 +17,11 @@ const Manager = () => {
         setShowPass(!showPass);
     };
 
+    const copyText = (text) => {
+        navigator.clipboard.writeText(text);
+        toast.success("Copied to clipboard!");
+    }
+
     const handleChange = (e) => {
         setForm({ ...Form, [e.target.name]: e.target.value });
     };
@@ -18,7 +29,6 @@ const Manager = () => {
     const savePassword = () => {
         setPasswordArray([...PasswordArray, Form]);
         localStorage.setItem('passwords', JSON.stringify([...PasswordArray, Form]));
-        console.log([...PasswordArray, Form])
     };
 
     useEffect(() => {
@@ -30,7 +40,7 @@ const Manager = () => {
 
     return (
         <>
-            <div className="absolute inset-0 -z-10 h-full w-full bg-green-100 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]">
+            <div className="fixed inset-0 -z-10 min-h-screen w-full bg-green-100 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]">
                 <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-green-400 opacity-20 blur-[100px]"></div>
             </div>
 
@@ -86,35 +96,61 @@ const Manager = () => {
                     </button>
                 </div>
 
-
                 <div>
-                    <h1 className="text-2xl font-bold rounded-md ">
-                        Your Password
-                    </h1>
+                    <h1 className="text-2xl font-bold rounded-md">Your Password</h1>
+
                     {PasswordArray.length === 0 && <div>No Password To Show ....</div>}
-                    {PasswordArray.length != 0 && <table className="table-auto w-full rounded-lg overflow-hidden">
-                        <thead className="bg-green-800 text-white rounded-t-lg">
-                            <tr>
-                                <th className="px-4 py-2">Site</th>
-                                <th className="px-4 py-2">UserName</th>
-                                <th className="px-4 py-2">Password</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {PasswordArray.map((item) => {
-                                return <tr>
-                                    <td className="text-center w-32 bg-green-200 rounded-l-lg px-4 py-2">{item.site}</td>
-                                    <td className="text-center w-32 bg-green-200 px-4 py-2">{item.username}</td>
-                                    <td className="text-center w-32 bg-green-200 rounded-r-lg px-4 py-2">{item.password}</td>
-                                </tr>
-                            })}
 
+                    {PasswordArray.length !== 0 && (
+                        <div className="overflow-x-auto">
+                            <table className="table-auto w-full min-w-max rounded-lg overflow-hidden border border-gray-400 border-collapse">
+                                <thead className="bg-green-800 text-white">
+                                    <tr>
+                                        <th className="px-4 py-3 text-left whitespace-nowrap text-sm sm:text-base">Site</th>
+                                        <th className="px-4 py-3 text-left whitespace-nowrap text-sm sm:text-base">UserName</th>
+                                        <th className="px-4 py-3 text-left whitespace-nowrap text-sm sm:text-base">Password</th>
+                                        <th className="px-4 py-3 text-center whitespace-nowrap text-sm sm:text-base">Action</th>
+                                    </tr>
+                                </thead>
 
-                        </tbody>
-                    </table>
-                    }
+                                <tbody>
+                                    {PasswordArray.map((item, index) => (
+                                        <tr key={index} className="border-b border-gray-300 hover:bg-green-100 transition duration-200">
+                                            <td className="bg-green-200 px-4 py-3 border-r border-gray-400 min-w-[120px] text-sm sm:text-base">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="font-medium text-gray-700 truncate">{item.site}</span>
+                                                    <img src={copyButton} alt="Copy" className="w-5 h-5 cursor-pointer hover:opacity-80 transition duration-200" onClick={() => copyText(item.site)} />
+                                                </div>
+                                            </td>
+
+                                            <td className="bg-green-200 px-4 py-3 border-r border-gray-400 min-w-[120px] text-sm sm:text-base">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="font-medium text-gray-700 truncate">{item.username}</span>
+                                                    <img src={copyButton} alt="Copy" className="w-5 h-5 cursor-pointer hover:opacity-80 transition duration-200" onClick={() => copyText(item.username)} />
+                                                </div>
+                                            </td>
+
+                                            <td className="bg-green-200 px-4 py-3 border-r border-gray-400 min-w-[120px] text-sm sm:text-base">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="font-medium text-gray-700 truncate">{item.password}</span>
+                                                    <img src={copyButton} alt="Copy" className="w-5 h-5 cursor-pointer hover:opacity-80 transition duration-200" onClick={() => copyText(item.password)} />
+                                                </div>
+                                            </td>
+
+                                            <td className="w-24 bg-green-200 px-4 py-3 flex justify-center items-center space-x-2 border-l border-gray-400 rounded-r-lg">
+                                                <img src={editButton} alt="Edit" className="w-5 h-5 cursor-pointer hover:scale-110 transition duration-200" />
+                                                <img src={deleteButton} alt="Delete" className="w-5 h-5 cursor-pointer hover:scale-110 transition duration-200" />
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
                 </div>
             </div>
+
+            <ToastContainer />
         </>
     );
 };
