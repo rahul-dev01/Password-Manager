@@ -15,6 +15,7 @@ const Manager = () => {
     const [PasswordArray, setPasswordArray] = useState([]);
     const [showPass, setShowPass] = useState(false);
     const [editId, setEditId] = useState(null);
+    const [isUpdate, setIsUpdate] = useState(false);
 
     const showPassword = () => {
         setShowPass(!showPass);
@@ -87,6 +88,7 @@ const Manager = () => {
             fetchPasswords();
             setForm({ site: '', username: '', password: '' });
             setEditId(null);
+            setIsUpdate(false);
         } catch (error) {
             toast.error(error.message);
         }
@@ -108,11 +110,18 @@ const Manager = () => {
     const editDetails = (item) => {
         setForm(item);
         setEditId(item._id);
+        setIsUpdate(true);
     };
 
     const copyText = (text) => {
         navigator.clipboard.writeText(text);
         toast.success("Copied to clipboard!");
+    };
+
+    const cancelUpdate = () => {
+        setForm({ site: '', username: '', password: '' });
+        setEditId(null);
+        setIsUpdate(false);
     };
 
     return (
@@ -170,6 +179,14 @@ const Manager = () => {
                         className="flex items-center justify-center bg-green-400 text-white px-8 py-3 rounded-full gap-3 w-fit mx-auto border border-green-600 hover:bg-green-700 hover:border-green-800 transition">
                         {editId ? 'Update Password' : 'Add Password'}
                     </button>
+
+                    {isUpdate && (
+                        <button
+                            onClick={cancelUpdate}
+                            className="flex items-center justify-center bg-red-400 text-white px-8 py-3 rounded-full gap-3 w-fit mx-auto border border-red-600 hover:bg-red-700 hover:border-red-800 transition">
+                            Cancel Update
+                        </button>
+                    )}
                 </div>
 
                 <div>
@@ -192,7 +209,7 @@ const Manager = () => {
                                         <tr key={index} className="border-b border-gray-300 hover:bg-green-100 transition duration-200">
                                             <td className="bg-green-200 px-4 py-3 border-r border-gray-400 min-w-[120px] text-sm sm:text-base">
                                                 <div className="flex justify-between items-center">
-                                                    <span className="font-medium text-gray-700 truncate">{item.site}</span>
+                                                <a href={item.site} target='_blank'><span className="font-medium text-gray-700 truncate">{item.site}</span></a>
                                                     <img src={copyButton} alt="Copy" className="w-5 h-5 cursor-pointer hover:opacity-80 transition duration-200" onClick={() => copyText(item.site)} />
                                                 </div>
                                             </td>
@@ -206,8 +223,8 @@ const Manager = () => {
 
                                             <td className="bg-green-200 px-4 py-3 border-r border-gray-400 min-w-[120px] text-sm sm:text-base">
                                                 <div className="flex justify-between items-center">
-                                                    <span className="font-medium text-gray-700 truncate">{item.password}</span>
-                                                    <img src={copyButton} alt="Copy" className="w-5 h-5 cursor-pointer hover:opacity-80 transition duration-200" onClick={() => copyText(item.password)} />
+                                                    <span className="font-medium text-gray-700 truncate">{item.encryptedPassword}</span>
+                                                    <img src={copyButton} alt="Copy" className="w-5 h-5 cursor-pointer hover:opacity-80 transition duration-200 "  onClick={() => copyText(item.encryptedPassword)} />
                                                 </div>
                                             </td>
 
