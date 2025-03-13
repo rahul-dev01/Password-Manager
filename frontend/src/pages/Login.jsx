@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../Component/Footer";
+
 
 const LoginRegister = ({ setUser }) => {
     const [isLogin, setIsLogin] = useState(true);
@@ -26,7 +26,7 @@ const LoginRegister = ({ setUser }) => {
             const data = await response.json();
             if (response.ok) {
                 localStorage.setItem("user", JSON.stringify(data.user));
-                localStorage.setItem("token", data.token); // Store token for authentication
+                localStorage.setItem("token", data.token);
                 setUser(data.user);
                 navigate("/manager");
             } else {
@@ -40,7 +40,11 @@ const LoginRegister = ({ setUser }) => {
 
     return (
         <>
-            <div className="flex justify-center items-center h-screen bg-gray-900 text-white">
+            <div className="fixed inset-0 -z-10 min-h-screen w-full bg-green-100 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]">
+                <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-green-400 opacity-20 blur-[100px]"></div>
+            </div>
+
+            <div className="flex justify-center items-center h-screen text-white">
                 <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-96">
                     <h2 className="text-center text-2xl font-bold mb-4">
                         {isLogin ? "Login" : "Register"}
@@ -96,7 +100,7 @@ const LoginRegister = ({ setUser }) => {
                     </p>
                 </div>
             </div>
-            <Footer />
+
         </>
     );
 };

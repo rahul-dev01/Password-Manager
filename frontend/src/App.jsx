@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import NavBar from "./Component/NavBar";
 import Manager from "./Component/Manager";
 import LoginRegister from "./pages/Login";
+import Footer from "./Component/Footer";
 
 const App = () => {
     const [user, setUser] = useState(null);
@@ -47,8 +48,11 @@ const App = () => {
                     } 
                 />
                 <Route path="*" element={<Navigate to="/" />} />
+                
             </Routes>
+            <Footer/>
         </Router>
+        
     );
 };
 
