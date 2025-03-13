@@ -17,6 +17,15 @@ const Manager = () => {
     const [editId, setEditId] = useState(null);
     const [isUpdate, setIsUpdate] = useState(false);
 
+    const [visiblePasswords, setVisiblePasswords] = useState({});
+
+    const togglePasswordVisibility = (id) => {
+        setVisiblePasswords((prev) => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
+    };
+
     const showPassword = () => {
         setShowPass(!showPass);
     };
@@ -59,10 +68,10 @@ const Manager = () => {
                 },
                 body: JSON.stringify(Form)
             });
-            
+
             const result = await response.json();
             if (!response.ok) throw new Error(result.message || "Failed to add password.");
-            
+
             toast.success("Password added!");
             fetchPasswords();
             setForm({ site: '', username: '', password: '' });
@@ -81,9 +90,9 @@ const Manager = () => {
                 },
                 body: JSON.stringify(Form)
             });
-            
+
             if (!response.ok) throw new Error("Failed to update password.");
-            
+
             toast.success("Password updated!");
             fetchPasswords();
             setForm({ site: '', username: '', password: '' });
@@ -95,6 +104,9 @@ const Manager = () => {
     };
 
     const deletePassword = async (id) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this password?");
+        if (!confirmDelete) return;
+
         try {
             await fetch(`${API_BASE_URL}/password/delete/${id}`, {
                 method: "DELETE",
@@ -106,6 +118,7 @@ const Manager = () => {
             toast.error("Failed to delete password.");
         }
     };
+
 
     const editDetails = (item) => {
         setForm(item);
@@ -209,7 +222,7 @@ const Manager = () => {
                                         <tr key={index} className="border-b border-gray-300 hover:bg-green-100 transition duration-200">
                                             <td className="bg-green-200 px-4 py-3 border-r border-gray-400 min-w-[120px] text-sm sm:text-base">
                                                 <div className="flex justify-between items-center">
-                                                <a href={item.site} target='_blank'><span className="font-medium text-gray-700 truncate">{item.site}</span></a>
+                                                    <a href={item.site} target='_blank'><span className="font-medium text-gray-700 truncate">{item.site}</span></a>
                                                     <img src={copyButton} alt="Copy" className="w-5 h-5 cursor-pointer hover:opacity-80 transition duration-200" onClick={() => copyText(item.site)} />
                                                 </div>
                                             </td>
@@ -223,10 +236,29 @@ const Manager = () => {
 
                                             <td className="bg-green-200 px-4 py-3 border-r border-gray-400 min-w-[120px] text-sm sm:text-base">
                                                 <div className="flex justify-between items-center">
-                                                    <span className="font-medium text-gray-700 truncate">{item.encryptedPassword}</span>
-                                                    <img src={copyButton} alt="Copy" className="w-5 h-5 cursor-pointer hover:opacity-80 transition duration-200 "  onClick={() => copyText(item.encryptedPassword)} />
+                                                    <span className="font-medium text-gray-700 truncate">
+                                                        {visiblePasswords[item._id] ? item.encryptedPassword : '••••••••'}
+                                                    </span>
+
+                                                    <div className="flex items-center space-x-2">
+
+
+                                                        <img
+                                                            src={visiblePasswords[item._id] ? closeEyeIcon : eyeIcon}
+                                                            alt="Toggle Password"
+                                                            className="w-6 h-6 cursor-pointer hover:opacity-80 transition duration-200"
+                                                            onClick={() => togglePasswordVisibility(item._id)}
+                                                        />
+                                                        <img
+                                                            src={copyButton}
+                                                            alt="Copy"
+                                                            className="w-4 h-4 cursor-pointer hover:opacity-80 transition duration-200"
+                                                            onClick={() => copyText(item.encryptedPassword)}
+                                                        />
+                                                    </div>
                                                 </div>
                                             </td>
+
 
                                             <td className="bg-green-200 px-1 py-3 flex justify-around items-center space-x-1 border-l border-gray-400 rounded-r-lg w-[80px]">
                                                 <span onClick={() => editDetails(item)}><img src={editButton} alt="Edit" className="w-4 h-4 cursor-pointer hover:scale-110 transition duration-200" /></span>
