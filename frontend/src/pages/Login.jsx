@@ -44,8 +44,8 @@ const LoginRegister = ({ setUser }) => {
                 <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-green-400 opacity-20 blur-[100px]"></div>
             </div>
 
-            <div className="flex justify-center items-center h-screen text-white">
-                <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-96">
+            <div className="flex justify-center mt-[20vh]  items-center  text-white">
+                <div className="bg-gray-800 p-8 rounded-lg shadow-[0_10px_30px_rgba(0,0,0,1)] w-96">
                     <h2 className="text-center text-2xl font-bold mb-4">
                         {isLogin ? "Login" : "Register"}
                     </h2>

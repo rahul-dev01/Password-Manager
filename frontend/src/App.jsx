@@ -36,23 +36,25 @@ const App = () => {
 
     return (
         <Router>
-            <NavBar user={user} onLogout={handleLogout} />
-            <Routes>
-                <Route path="/" element={<LoginRegister setUser={setUser} />} />
-                <Route 
-                    path="/manager" 
-                    element={
-                        <ProtectedRoute>
-                            <Manager />
-                        </ProtectedRoute>
-                    } 
-                />
-                <Route path="*" element={<Navigate to="/" />} />
-                
-            </Routes>
-            <Footer/>
+            <div className="flex flex-col min-h-screen">
+                <NavBar user={user} onLogout={handleLogout} />
+                <div className="flex-1">
+                    <Routes>
+                        <Route path="/" element={<LoginRegister setUser={setUser} />} />
+                        <Route 
+                            path="/manager" 
+                            element={
+                                <ProtectedRoute>
+                                    <Manager />
+                                </ProtectedRoute>
+                            } 
+                        />
+                        <Route path="*" element={<Navigate to="/" />} />
+                    </Routes>
+                </div>
+                <Footer />
+            </div>
         </Router>
-        
     );
 };
 
